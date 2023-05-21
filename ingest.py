@@ -9,18 +9,35 @@ from langchain.vectorstores.faiss import FAISS
 
 def ingest_docs():
     """Get documents from web pages."""
-    loader = ReadTheDocsLoader("langchain.readthedocs.io/en/latest/")
+
+    print("ingest_docs")
+
+    embeddings = OpenAIEmbeddings()
+    print("embeddings")
+    print(embeddings)
+
+    loader = ReadTheDocsLoader("python.langchain.com/en/latest/")
+    print("loader")
+    print(loader)
+
     raw_documents = loader.load()
+    print("raw_documents")
+    print(raw_documents)
+
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=200,
     )
+
     documents = text_splitter.split_documents(raw_documents)
-    embeddings = OpenAIEmbeddings()
+    print(documents)
+
     vectorstore = FAISS.from_documents(documents, embeddings)
+    print(vectorstore)
 
     # Save vectorstore
     with open("vectorstore.pkl", "wb") as f:
+        print('should be saving the pkl file')
         pickle.dump(vectorstore, f)
 
 
